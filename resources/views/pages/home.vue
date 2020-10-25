@@ -108,15 +108,50 @@
                             label="اكتب اسم الناخب بالكامل هنا"
                         ></v-text-field>
 
-
-                        <v-select
+                        <v-autocomplete
                             v-model="supervisor"
                             :items="supervisors"
-                            label="المسئول"
+                            :loading="isLoading"
+                            chips
+                            clearable
+                            hide-details
+                            hide-no-data
+                            
                             item-text="name"
                             item-value="id"
-                            required
-                        ></v-select>
+                            label="المسئول"
+                            :persistent-hint="false"
+                        >
+                            <template v-slot:selection="{ attr, on, item, selected }">
+                                <v-chip
+                                    v-bind="attr"
+                                    :input-value="selected"
+                                    color="blue-grey"
+                                    class="white--text"
+                                    v-on="on"
+                                >
+                                    <span v-text="item.name"></span>
+                                </v-chip>
+                            </template>
+
+                            <template v-slot:no-data>
+                                <v-list-item>
+                                    <v-list-item-title>
+                                        جارى البحث عن
+                                    </v-list-item-title>
+                                </v-list-item>
+                            </template>
+
+                            <template v-slot:item="{ item }">
+                                    <v-list-item-content>
+                                        <v-list-item-title v-text="item.name"></v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </template>
+
+                        </v-autocomplete>
+
+                        <v-divider :class="'my-5'"></v-divider>
 
                         <table cellspacing="0" class="table table-bordered custom">
                            <tbody>
@@ -210,6 +245,7 @@
                     name: '',
                 },
                 supervisor:null,
+                supervisorSync:null,
                 supervisors:[],
                 isLoading: false,
                 notify:{
