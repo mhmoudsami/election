@@ -108,6 +108,16 @@
                             label="اكتب اسم الناخب بالكامل هنا"
                         ></v-text-field>
 
+
+                        <v-select
+                            v-model="supervisor"
+                            :items="supervisors"
+                            label="المسئول"
+                            item-text="name"
+                            item-value="id"
+                            required
+                        ></v-select>
+
                         <table cellspacing="0" class="table table-bordered custom">
                            <tbody>
                               <tr>
@@ -199,6 +209,8 @@
                 candidate:{
                     name: '',
                 },
+                supervisor:null,
+                supervisors:[],
                 isLoading: false,
                 notify:{
                     display: false,
@@ -209,6 +221,7 @@
             }
         },
         created() {
+            this.getAppData();
         },
         computed: {
         },
@@ -217,6 +230,14 @@
             }
         },
         methods: {
+            getAppData(){
+                this.isLoading = true;
+                Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                Request.get('/api/supervisors/list',).then(response => {
+                    this.supervisors = response.data;
+                    this.isLoading = false;
+                });
+            },
             displayInf(){
 
                 if ( ! this.uuid ) {
@@ -281,6 +302,7 @@
                 Request.post('/api/candidates' , {
                     uid: this.candidate.uid,
                     name: this.candidate.name,
+                    supervisor: this.supervisor,
                     location: this.candidate.location,
                     address: this.candidate.address,
                     state: this.candidate.state,

@@ -51,6 +51,7 @@ class CandidateController extends Controller
             'list_const' => $request->list_const,
             'location' => $request->location,
             'name' => $request->name,
+            'supervisor_id' => $request->supervisor,
             'police' => $request->police,
             'state' => $request->state,
             'uid' => $request->uid,

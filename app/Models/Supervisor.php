@@ -28,4 +28,12 @@ class Supervisor extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * Get the candidates for the supervisor.
+     */
+    public function candidates()
+    {
+        return $this->hasMany('App\Models\Candidate');
+    }
 }

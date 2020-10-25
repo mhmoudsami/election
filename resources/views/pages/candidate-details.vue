@@ -89,7 +89,7 @@
                          <th>المسئول: </th>
                          <td>
                             <v-select
-                                v-model="supervisor"
+                                v-model="candidate.supervisor_id"
                                 :items="supervisors"
                                 label="المسئول"
                                 item-text="name"
@@ -102,6 +102,10 @@
                           <tr>
                              <th>الاسم: </th>
                              <td>{{ candidate.name }}</td>
+                          </tr>
+                          <tr>
+                             <th>المسئول: </th>
+                             <td>{{ candidate.supervisor_name }}</td>
                           </tr>
                           <tr>
                              <th>الرقم القومى: </th>
@@ -236,11 +240,7 @@
             getCandidateDetails(id){
                 this.isLoading = true;
                 Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-                Request.get('/api/candidates/'+id , {
-                    params: {
-                        id : id,
-                    }
-                }).then(response => {
+                Request.get('/api/candidates/'+id).then(response => {
                     console.log(response.data);
                     this.candidate = response.data;
                     this.isLoading = false;
@@ -280,13 +280,14 @@
                 Request.put('/api/candidates/'+this.id , {
                         id : this.id,
                         name: this.candidate.name,
-                        supervisor_id: this.supervisor
+                        supervisor_id: this.candidate.supervisor_id
                 }).then(response => {
                     this.notify.display = true;
                     this.notify.text = response.data.message;
                     this.notify.color = 'green';
                     this.isLoading = false;
                     this.editMode = false;
+                    location.reload();
                 });
             },
         }
