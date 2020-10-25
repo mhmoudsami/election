@@ -125,25 +125,31 @@
                 this.isLoading = true;
                 this.isLoadingMore = isLoadingMore;
 
+                if ( isLoadingMore ) {
+                    console.log('dfdfdf');
+                }
+
                 Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
                 Request.get('/api/supervisors' , {
                     params:{
-                        page: this.currentPage,
+                        page: page,
                     }
                 }).then(response => {
                     this.supervisors = this.supervisors.concat(response.data.data);
-                    this.pageCount = response.data.total;
+                    this.pageCount = response.data.last_page;
                     this.currentPage = response.data.current_page;
-                    console.log(response.data);
+                    // console.log(response.data);
                     this.isLoading = false;
+                    this.isLoadingMore = false;
                 }).catch(error => {
                     this.notify.display = true;
                     this.notify.text = 'حدث خطأ ما , رجاء اعادة المحاوله';
                     this.isLoading = false;
+                    this.isLoadingMore = false;
                 });
             },
             loadMore(){
-                this.getSupervisors(this.currentPage++ , true);
+                this.getSupervisors((this.currentPage+=1) , true);
             },
         }
     }
