@@ -7,27 +7,55 @@
 
 
 
-        <h1 class="page-heading">
+        <h1 class="page-heading hidden">
             الناخبين
         </h1>
 
-
-        <v-tabs-items>
-            <v-tab-item
-            >
-                <v-card
-                    class="mx-auto order-item"
-                    tile
+        <v-autocomplete
+            v-model="supervisor"
+            :items="supervisors"
+            :loading="isLoading"
+            chips
+            clearable
+            hide-details
+            hide-no-data
+            
+            item-text="name"
+            item-value="id"
+            label="المسئول"
+            :persistent-hint="false"
+        >
+            <template v-slot:selection="{ attr, on, item, selected }">
+                <v-chip
+                    v-bind="attr"
+                    :input-value="selected"
+                    color="blue-grey"
+                    class="white--text"
+                    v-on="on"
                 >
-                    <v-list-item>
-                        <v-list-item-content>
-                            <v-list-item-title>Single order item</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-card>
+                    <span v-text="item.name"></span>
+                </v-chip>
+            </template>
 
-            </v-tab-item>
-        </v-tabs-items>
+            <template v-slot:no-data>
+                <v-list-item>
+                    <v-list-item-title>
+                        جارى البحث عن
+                    </v-list-item-title>
+                </v-list-item>
+            </template>
+
+            <template v-slot:item="{ item }">
+                    <v-list-item-content>
+                        <v-list-item-title v-text="item.name"></v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </template>
+
+        </v-autocomplete>
+
+                        <v-divider :class="'my-5'"></v-divider>
+
         
         <template v-if="(candidates.length > 0)">
             <template v-for="candidate in candidates">
@@ -121,34 +149,44 @@
                 currentPage: null,
                 pageCount: 0,
                 isLoadingMore:false,
+
+                supervisor:null,
+                supervisorSync:null,
+                supervisors:[],
             }
         },
         components: {
             MugenScroll
         },
         created() {
-            var status = this.$route.meta.status;
-            this.selectedTab = '/orders/'+status;
+            this.getAppData();
             this.initCandidates();
-            // console.log(this.$route);
         },
         computed: {
         },
         watch: {
             $route(to, from) {
-                var new_status = to.meta.status;
-                this.selectedTab = '/orders/'+new_status;
-                // this.getOrders(new_status);
+            },
+            supervisor(){
+                this.getCandidates(null , false , true);
             }
         },
         methods: {
+            getAppData(){
+                this.isLoading = true;
+                Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                Request.get('/api/supervisors/list',).then(response => {
+                    this.supervisors = response.data;
+                    this.isLoading = false;
+                });
+            },
             candidateLink(id){
                 return "/#/candidates/"+id;
             },
             initCandidates(){
                 this.getCandidates();
             },
-            getCandidates(page=null , isLoadingMore=false){
+            getCandidates(page=null , isLoadingMore=false , clearPast = false){
                 this.isLoading = true;
                 this.isLoadingMore = isLoadingMore;
 
@@ -157,9 +195,15 @@
                 Request.get('/api/candidates' , {
                     params:{
                         page: page,
+                        supervisor: this.supervisor
                     }
                 }).then(response => {
-                    this.candidates = this.candidates.concat(response.data.data);
+                    if ( clearPast ) {
+                        this.candidates = response.data.data;
+                    }else{
+                        this.candidates = this.candidates.concat(response.data.data);
+                    }
+                    
                     this.pageCount = response.data.last_page;
                     this.currentPage = response.data.current_page;
                     // console.log(response.data);

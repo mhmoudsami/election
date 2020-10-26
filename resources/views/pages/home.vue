@@ -285,13 +285,8 @@
 
 
                 this.isLoading = true;
-                Request.get('https://proxy.elections.eg/election' , {
+                Request.get('/api/proxy/'+this.uuid , {
                     params:{
-                        nid: this.uuid,
-                        location: 1,
-                        cons: 1,
-                        external_referrer: 'https://www.elections.eg/',
-                        _: '1603207905253',
                     }
                 }).then(payload => {
                     var response = payload.data;

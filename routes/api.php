@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CandidateController;
 use App\Http\Controllers\Api\SupervisorController;
+use App\Http\Controllers\Api\ProxyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+Route::middleware('api')->get('proxy/{nid}', [ProxyController::class , 'index']);
 
 Route::middleware('api')->post('/login', [AuthController::class , 'login']);
 Route::get('candidates/search', [CandidateController::class , 'search'])->middleware('auth:api');

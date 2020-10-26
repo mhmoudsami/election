@@ -13,9 +13,13 @@ class CandidateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $candidates = Candidate::paginate(20);
+        $where = [];
+        if ( $request->supervisor ) {
+            $where = ['supervisor_id' => $request->supervisor];
+        }
+        $candidates = Candidate::where($where)->paginate(20);
         
         return $candidates;
     }
