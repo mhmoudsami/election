@@ -54,7 +54,7 @@
 
         </v-autocomplete>
 
-                        <v-divider :class="'my-5'"></v-divider>
+        <v-divider :class="'my-5'"></v-divider>
 
         
         <template v-if="(candidates.length > 0)">

@@ -41,28 +41,22 @@
         >
             <div class="py-5 px-5">
 
-                <v-form
-                    ref="form"
-                    v-model="valid"
-                    :lazy-validation="false"
-                >
-
-                    <v-text-field
-                        v-model="uuid"
-                        label="الرقم القومى"
-                        autofocus
-                    ></v-text-field>
+                <v-text-field
+                    v-model="uuid"
+                    label="الرقم القومى"
+                    autofocus
+                    v-on:keydown.enter.prevent='displayInf()'
+                ></v-text-field>
 
 
-                    <template v-if="errors">
-                        <template v-for="(k , v) in errors">
-                            <p>
-                                <span class="red--text">{{ k[0] }}</span>
-                            </p>
-                        </template>
+                <template v-if="errors">
+                    <template v-for="(k , v) in errors">
+                        <p>
+                            <span class="red--text">{{ k[0] }}</span>
+                        </p>
                     </template>
+                </template>
                     
-                </v-form>
 
             </div>
 
