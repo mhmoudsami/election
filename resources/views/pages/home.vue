@@ -80,6 +80,72 @@
             
         </v-card>
 
+        <template v-if="exist">
+            <v-card
+                class="mx-auto mt-10"
+                tile
+            >
+                <div class="title px-5 py-5">
+                    بيانات الناخب المسجله
+                </div>
+                <div class="px-5 clearfix">
+                    <table cellspacing="0" class="table table-bordered custom">
+                       <tbody>
+                          <tr>
+                             <th>الاسم: </th>
+                             <td>{{ candidate.name }}</td>
+                          </tr>
+                          <tr>
+                             <th>المسئول: </th>
+                             <td>{{ candidate.supervisor_name }}</td>
+                          </tr>
+                          <tr>
+                             <th>مركزك الإنتخابي: </th>
+                             <td>{{ candidate.location }}</td>
+                          </tr>
+                          <tr>
+                             <th>محافظة: </th>
+                             <td>{{ candidate.state }}</td>
+                          </tr>
+                          <tr>
+                             <th>قسم: </th>
+                             <td>{{ candidate.police }}</td>
+                          </tr>
+                          <tr>
+                             <th>العنوان : </th>
+                             <td>{{ candidate.address }}</td>
+                          </tr>
+                          <tr>
+                             <th>رقم اللجنة الفرعية: </th>
+                             <td>{{ candidate.boxnumber }}</td>
+                          </tr>
+                          <tr>
+                             <th>رقمك في الكشوف الانتخابية: </th>
+                             <td>{{ candidate.citizen_number }}</td>
+                          </tr>
+                          <tr>
+                             <th>تاريخ التصويت: </th>
+                             <td>{{ candidate.date_round_1 }}</td>
+                          </tr>
+                          <tr>
+                             <th>دائرة الفردي: </th>
+                             <td>
+                                {{ candidate.indiv_const }}
+                             </td>
+                          </tr>
+                          <tr>
+                             <th>دائرة القائمة: </th>
+                             <td>
+                                {{ candidate.list_const }}
+                             </td>
+                          </tr>
+                       </tbody>
+                    </table>
+                </div>
+            </v-card>
+        </template>
+
+
         <template v-if="step==1">
             
             <v-form
@@ -230,6 +296,7 @@
         name: 'Home',
         data () {
             return {
+                exist: false,
                 step: 0,
                 // uuid: "28609010106931",
                 uuid: "",
@@ -270,6 +337,8 @@
             },
             displayInf(){
 
+                this.exist = false;
+
                 if ( ! this.uuid ) {
                     this.notify.display = true;
                     this.notify.text = 'يجب ادخال الرقم القومى';
@@ -284,8 +353,24 @@
                     }
                 }).then(payload => {
                     var response = payload.data;
-                    console.log(this.uuid);
-                    console.log(response);
+
+                    if ( response.exist ) {
+                        this.exist = true;
+                        this.candidate = response.payload;
+                        this.isLoading = false;
+                        return;
+                    }
+
+                    if ( response.status == 'INVALID' ) {
+                        this.notify.display = true;
+                        this.notify.text = response.rejection_reason.description;
+                        this.isLoading = false;
+
+                        return;
+                    }
+
+                    // console.log(this.uuid);
+                    // console.log(response);
                     this.candidate = {
                         uid: this.uuid,
                         name: this.candidate.name,
