@@ -12,15 +12,17 @@ class AuthController extends Controller
     {
 
         $request->validate([
-            'email' => ['required' , 'email'],
+            'name' => ['required'],
             'password' => ['required']
         ]);
 
-		$credentials = $request->only('email', 'password');
+		$credentials = $request->only('name', 'password');
 
         if ($id = \Auth::attempt($credentials)) {
-            $user = User::find($id);
+            // dd($id);
+            $user = \Auth::user();
             // dd($user);
+            // dd($user->supervisor);
             // dd($user->createToken('Auth Token'));
             $token = $user->createToken('Auth Token')->accessToken;
 

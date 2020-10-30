@@ -22,10 +22,10 @@ export default {
             Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
             Request.post('/api/login', {
-                email: login,
+                name: login,
                 password: pwd,
             }).then(response => {
-                // console.log(response.data);
+                console.log(response.data);
                 if (response.data.success) {
                     localStorage.setItem('token' , response.data.token);
                     localStorage.setItem('isSupervisor' , response.data.isSupervisor);
