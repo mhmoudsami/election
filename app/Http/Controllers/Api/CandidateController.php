@@ -24,7 +24,7 @@ class CandidateController extends Controller
         if ( $request->candidateName ) {
             $candidates->where('name'  , 'LIKE' , "%$request->candidateName%");
         }
-        if ( $request->super_id ) {
+        if ( $request->super_id && $request->super_id != 'false' ) {
             $candidates->where(['supervisor_id' => $request->super_id]);
         }
 
