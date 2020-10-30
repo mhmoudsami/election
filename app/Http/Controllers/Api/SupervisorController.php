@@ -143,12 +143,25 @@ class SupervisorController extends Controller
          * update user name and password if exist
          * @var [type]
          */
-        $user = $supervisor->user;
-        $user->name = $request->username;
-        if ( $request->password ) {
-            $user->password = Hash::make($request->password);
+        if ( ! $supervisor->user ) {
+            $user = User::create([
+                'email' => time()."@election.info",
+                'email_verified_at' => now(),
+                'name' => $request->username,
+                'password' => Hash::make($request->password),
+            ]);
+        }else{
+            $user = $supervisor->user;
+            $user->name = $request->username;
+            if ( $request->password ) {
+                $user->password = Hash::make($request->password);
+            }
         }
+        
         $user->save();
+
+        $supervisor->user_id = $user->id;
+        $supervisor->save();
 
 
 
