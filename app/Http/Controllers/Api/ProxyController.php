@@ -35,6 +35,18 @@ class ProxyController extends Controller
 		    '_' => '1603193207573',
 		]);
 
+		$decoded = json_decode($response->body());
+
+		if ( isset($decoded->constituencies) ) {
+			if ( in_array($decoded->constituencies->indiv_const->name, ['الخانكه' , 'الخصوص' , 'العبور']) ) {
+	        	return [
+	        		'success' => false,
+	        		'message' => 'هذا الناخب خارج نطاق البحث',
+	        	];
+			}
+		}
+
+
 		return $response;
     }
 }

@@ -359,6 +359,14 @@
                 }).then(payload => {
                     var response = payload.data;
 
+                    if ( response.success == false ) {
+                        this.notify.display = true;
+                        this.notify.text = response.message;
+                        this.notify.color = 'error';
+                        this.isLoading = false;
+                        return;
+                    }
+
                     if ( response.exist ) {
                         this.exist = true;
                         this.candidate = response.payload;
@@ -397,6 +405,7 @@
 
                     this.isLoading = false;
                 }).catch(error => {
+                    console.log(error);
                     this.notify.display = true;
                     this.notify.text = 'حدث خطأ ما , رجاء اعادة المحاوله';
                     this.isLoading = false;
