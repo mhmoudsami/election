@@ -15,11 +15,17 @@ class CandidateController extends Controller
      */
     public function index(Request $request)
     {
-        $where = [];
+        $candidates = Candidate::where([]);
+
+        
         if ( $request->supervisor ) {
-            $where = ['supervisor_id' => $request->supervisor];
+            $candidates->where(['supervisor_id' => $request->supervisor]);
         }
-        $candidates = Candidate::where($where)->paginate(20);
+        if ( $request->candidateName ) {
+            $candidates->where('name'  , 'LIKE' , "%$request->candidateName%");
+        }
+
+        $candidates = $candidates->paginate(20);
         
         return $candidates;
     }

@@ -11,48 +11,75 @@
             الناخبين
         </h1>
 
-        <v-autocomplete
-            v-model="supervisor"
-            :items="supervisors"
-            :loading="isLoading"
-            chips
-            clearable
-            hide-details
-            hide-no-data
-            
-            item-text="name"
-            item-value="id"
-            label="المسئول"
-            :persistent-hint="false"
-        >
-            <template v-slot:selection="{ attr, on, item, selected }">
-                <v-chip
-                    v-bind="attr"
-                    :input-value="selected"
-                    color="blue-grey"
-                    class="white--text"
-                    v-on="on"
+
+        <v-row>
+            <v-col
+                cols="12"
+                sm="6"
+                md="6"
+            >
+
+                <v-autocomplete
+                    v-model="supervisor"
+                    :items="supervisors"
+                    :loading="isLoading"
+                    chips
+                    clearable
+                    hide-details
+                    hide-no-data
+                    
+                    item-text="name"
+                    item-value="id"
+                    label="المسئول"
+                    :persistent-hint="false"
                 >
-                    <span v-text="item.name"></span>
-                </v-chip>
-            </template>
+                    <template v-slot:selection="{ attr, on, item, selected }">
+                        <v-chip
+                            v-bind="attr"
+                            :input-value="selected"
+                            color="blue-grey"
+                            class="white--text"
+                            v-on="on"
+                        >
+                            <span v-text="item.name"></span>
+                        </v-chip>
+                    </template>
 
-            <template v-slot:no-data>
-                <v-list-item>
-                    <v-list-item-title>
-                        جارى البحث عن
-                    </v-list-item-title>
-                </v-list-item>
-            </template>
+                    <template v-slot:no-data>
+                        <v-list-item>
+                            <v-list-item-title>
+                                جارى البحث عن
+                            </v-list-item-title>
+                        </v-list-item>
+                    </template>
 
-            <template v-slot:item="{ item }">
-                    <v-list-item-content>
-                        <v-list-item-title v-text="item.name"></v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </template>
+                    <template v-slot:item="{ item }">
+                            <v-list-item-content>
+                                <v-list-item-title v-text="item.name"></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </template>
 
-        </v-autocomplete>
+                </v-autocomplete>
+
+            </v-col>
+            <v-col
+                cols="12"
+                sm="6"
+                md="6"
+            >
+                <div class="" style="margin-top: 14px;">
+                    <v-text-field
+                        v-model="candidateName"
+                        label="اسم الناخب"
+                        autofocus
+                        required
+                    ></v-text-field>
+                </div>
+            </v-col>
+        </v-row>
+
+
 
         <v-divider :class="'my-5'"></v-divider>
 
@@ -149,6 +176,7 @@
                 currentPage: null,
                 pageCount: 0,
                 isLoadingMore:false,
+                candidateName: '',
 
                 supervisor:null,
                 supervisorSync:null,
@@ -168,6 +196,9 @@
             $route(to, from) {
             },
             supervisor(){
+                this.getCandidates(null , false , true);
+            },
+            candidateName(){
                 this.getCandidates(null , false , true);
             }
         },
@@ -195,7 +226,8 @@
                 Request.get('/api/candidates' , {
                     params:{
                         page: page,
-                        supervisor: this.supervisor
+                        supervisor: this.supervisor,
+                        candidateName: this.candidateName,
                     }
                 }).then(response => {
                     if ( clearPast ) {

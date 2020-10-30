@@ -51,6 +51,7 @@ class SupervisorController extends Controller
 
         $supervisor = Supervisor::create([
             'mobile' => $request->mobile,
+            'mobile_2' => $request->mobile_2,
             'name' => $request->name,
         ]);
 
@@ -86,6 +87,9 @@ class SupervisorController extends Controller
     {
         $supervisor->name = $request->name;
         $supervisor->mobile = $request->mobile;
+        $supervisor->mobile_2 = $request->mobile_2;
+        // $supervisor->username = $request->username;
+        
 
         if ( ! $supervisor->save() ) {
             return [

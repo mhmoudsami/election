@@ -61,6 +61,16 @@
                          </td>
                       </tr>
                       <tr>
+                         <th>الموبايل 2 : </th>
+                         <td>
+                            <v-text-field
+                                v-model="supervisor.mobile_2"
+                                label="رقم الموبايل"
+                                required
+                            ></v-text-field>
+                         </td>
+                      </tr>
+                      <tr>
                          <th> - </th>
                          <td>
                             <v-btn color="success darken-1" depressed @click="addNewSuper()">اضافة</v-btn>
@@ -98,6 +108,9 @@
                 supervisor:{
                     name: '',
                     mobile: '',
+                    mobile_2: '',
+                    username: '',
+                    password: '',
                 },
                 notify:{
                     display: false,
@@ -125,9 +138,12 @@
                 Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
                 Request.post('/api/supervisors/', {
                         name: this.supervisor.name,
-                        mobile: this.supervisor.mobile
+                        mobile: this.supervisor.mobile,
+                        mobile_2: this.supervisor.mobile_2,
+                        username: this.supervisor.username,
+                        password: this.supervisor.password,
                 }).then(response => {
-                    console.log(response);
+                    // console.log(response);
                     this.notify.display = true;
                     this.notify.text = response.data.message;
                     this.notify.color = 'green';

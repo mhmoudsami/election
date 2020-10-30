@@ -41,7 +41,7 @@
                         <v-btn
                             depressed
                             color="success"
-                            @click="updateCandidate()"
+                            @click="updateSupervisor()"
                         >
                             حفظ
                         </v-btn>
@@ -94,14 +94,27 @@
                             ></v-text-field>
                          </td>
                       </tr>
+                      <tr v-if="editMode">
+                         <th>الموبايل 2: </th>
+                         <td>
+                            <v-text-field
+                                v-model="supervisor.mobile_2"
+                                label=""
+                            ></v-text-field>
+                         </td>
+                      </tr>
                       <template v-if="!editMode">
                           <tr>
                              <th>الاسم: </th>
                              <td>{{ supervisor.name }}</td>
                           </tr>
                           <tr>
-                             <th>الرقم الموبايل: </th>
+                             <th>الموبايل: </th>
                              <td>{{ supervisor.mobile }}</td>
+                          </tr>
+                          <tr>
+                             <th>الموبايل 2: </th>
+                             <td>{{ supervisor.mobile_2 }}</td>
                           </tr>
                       </template>
                    </tbody>
@@ -190,12 +203,21 @@
             enebleEditMode(){
                 this.editMode = true;
             },
-            updateCandidate(){
+            updateSupervisor(){
+
+                if ( ! this.supervisor.mobile || ! this.supervisor.name ) {
+                    this.notify.display = true;
+                    this.notify.text = 'ادخل الاسم ورقم الجوال';
+                    this.notify.color = 'error';
+                    return false;
+                }
+
                 this.isLoading = true;
                 Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
                 Request.put('/api/supervisors/'+this.id , {
                         name : this.supervisor.name,
                         mobile: this.supervisor.mobile,
+                        mobile_2: this.supervisor.mobile_2,
                 }).then(response => {
                     this.notify.display = true;
                     this.notify.text = response.data.message;
