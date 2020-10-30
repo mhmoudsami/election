@@ -71,6 +71,26 @@
                          </td>
                       </tr>
                       <tr>
+                         <th>اسم المستخدم : </th>
+                         <td>
+                            <v-text-field
+                                v-model="supervisor.username"
+                                label="اسم المستخدم"
+                                required
+                            ></v-text-field>
+                         </td>
+                      </tr>
+                      <tr>
+                         <th>كلمة المرور : </th>
+                         <td>
+                            <v-text-field
+                                v-model="supervisor.password"
+                                label="كلمة المرور"
+                                required
+                            ></v-text-field>
+                         </td>
+                      </tr>
+                      <tr>
                          <th> - </th>
                          <td>
                             <v-btn color="success darken-1" depressed @click="addNewSuper()">اضافة</v-btn>
@@ -130,19 +150,37 @@
             addNewSuper(){
                 if ( ! this.supervisor.mobile || ! this.supervisor.name ) {
                     this.notify.display = true;
-                    this.notify.text = 'كل الحقول ضروريه';
+                    this.notify.text = 'الاسم ورقم الجوال ضروريان';
                     this.notify.color = 'error';
                     return false;
                 }
+
+                if ( this.supervisor.username && ! this.supervisor.password ) {
+                    this.notify.display = true;
+                    this.notify.text = 'يجب ادخال كلمة المرور';
+                    this.notify.color = 'error';
+                    return;
+                }
+
+
                 this.isLoading = true;
                 Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-                Request.post('/api/supervisors/', {
+                Request.post('/api/supervisors', {
                         name: this.supervisor.name,
                         mobile: this.supervisor.mobile,
                         mobile_2: this.supervisor.mobile_2,
                         username: this.supervisor.username,
                         password: this.supervisor.password,
                 }).then(response => {
+                    if ( response.data.success == false ) {
+                        this.notify.display = true;
+                        this.notify.text = response.data.message;
+                        this.notify.color = 'error';
+                        this.isLoading = false;
+                        return;
+                    }
+
+
                     // console.log(response);
                     this.notify.display = true;
                     this.notify.text = response.data.message;

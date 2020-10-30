@@ -20,6 +20,14 @@ class Supervisor extends Model
         'mobile_2',
     ];
 
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['username'];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -31,10 +39,28 @@ class Supervisor extends Model
     ];
 
     /**
+     * Get the supervisor name.
+     *
+     * @return bool
+     */
+    public function getUsernameAttribute()
+    {
+        return ($this->user) ? $this->user->name : '-';
+    }
+
+    /**
      * Get the candidates for the supervisor.
      */
     public function candidates()
     {
         return $this->hasMany('App\Models\Candidate');
+    }
+
+    /**
+     * Get the user for the supervisor.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
     }
 }

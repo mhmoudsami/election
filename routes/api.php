@@ -26,7 +26,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('api')->get('proxy/{nid}', [ProxyController::class , 'index']);
 
 Route::middleware('api')->post('/login', [AuthController::class , 'login']);
+
 Route::get('candidates/search', [CandidateController::class , 'search'])->middleware('auth:api');
 Route::apiResource('candidates', CandidateController::class)->middleware('auth:api');
+
 Route::get('supervisors/list', [SupervisorController::class , 'list'])->middleware('auth:api');
 Route::apiResource('supervisors', SupervisorController::class)->middleware('auth:api');

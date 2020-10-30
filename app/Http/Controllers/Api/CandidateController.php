@@ -25,7 +25,7 @@ class CandidateController extends Controller
             $candidates->where('name'  , 'LIKE' , "%$request->candidateName%");
         }
 
-        $candidates = $candidates->paginate(20);
+        $candidates = $candidates->orderBy('id' , 'DESC')->paginate(20);
         
         return $candidates;
     }

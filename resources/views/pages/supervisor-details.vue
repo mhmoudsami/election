@@ -73,37 +73,57 @@
             </div>
 
             <v-card-text>
-                <table cellspacing="0" class="table table-bordered custom">
+                <table cellspacing="0" class="table  custom">
                    <tbody>
-                      <tr v-if="editMode">
-                         <th>الاسم : </th>
-                         <td>
-                            <v-text-field
-                                v-model="supervisor.name"
-                                label=""
-                                autofocus
-                            ></v-text-field>
-                         </td>
-                      </tr>
-                      <tr v-if="editMode">
-                         <th>الموبايل : </th>
-                         <td>
-                            <v-text-field
-                                v-model="supervisor.mobile"
-                                label=""
-                            ></v-text-field>
-                         </td>
-                      </tr>
-                      <tr v-if="editMode">
-                         <th>الموبايل 2: </th>
-                         <td>
-                            <v-text-field
-                                v-model="supervisor.mobile_2"
-                                label=""
-                            ></v-text-field>
-                         </td>
-                      </tr>
-                      <template v-if="!editMode">
+                      <template v-if="editMode">
+                          <tr>
+                             <th>الاسم : </th>
+                             <td>
+                                <v-text-field
+                                    v-model="supervisor.name"
+                                    label="الاسم"
+                                    autofocus
+                                ></v-text-field>
+                             </td>
+                          </tr>
+                          <tr>
+                             <th>الموبايل : </th>
+                             <td>
+                                <v-text-field
+                                    v-model="supervisor.mobile"
+                                    label="الموبايل"
+                                ></v-text-field>
+                             </td>
+                          </tr>
+                          <tr>
+                             <th>الموبايل 2: </th>
+                             <td>
+                                <v-text-field
+                                    v-model="supervisor.mobile_2"
+                                    label="الموبايل 2"
+                                ></v-text-field>
+                             </td>
+                          </tr>
+                          <tr>
+                             <th>اسم المستخدم: </th>
+                             <td>
+                                <v-text-field
+                                    v-model="supervisor.username"
+                                    label="اسم المستخدم"
+                                ></v-text-field>
+                             </td>
+                          </tr>
+                          <tr>
+                             <th>كلمة المرور: </th>
+                             <td>
+                                <v-text-field
+                                    v-model="supervisor.password"
+                                    label="كلمة المرور"
+                                ></v-text-field>
+                             </td>
+                          </tr>
+                      </template>
+                      <template v-else>
                           <tr>
                              <th>الاسم: </th>
                              <td>{{ supervisor.name }}</td>
@@ -115,6 +135,10 @@
                           <tr>
                              <th>الموبايل 2: </th>
                              <td>{{ supervisor.mobile_2 }}</td>
+                          </tr>
+                          <tr>
+                             <th>اسم المستخدم: </th>
+                             <td>{{ supervisor.username }}</td>
                           </tr>
                       </template>
                    </tbody>
@@ -218,7 +242,20 @@
                         name : this.supervisor.name,
                         mobile: this.supervisor.mobile,
                         mobile_2: this.supervisor.mobile_2,
+
+                        user_id: this.supervisor.user_id,
+                        username: this.supervisor.username,
+                        password: this.supervisor.password,
                 }).then(response => {
+
+                    if ( response.data.success ==  false ) {
+                        this.notify.display = true;
+                        this.notify.text = response.data.message;
+                        this.notify.color = 'error';
+                        this.isLoading = false;
+                        return;
+                    }
+
                     this.notify.display = true;
                     this.notify.text = response.data.message;
                     this.notify.color = 'green';
