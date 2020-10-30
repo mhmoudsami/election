@@ -20,11 +20,14 @@ class AuthController extends Controller
 
         if ($id = \Auth::attempt($credentials)) {
             $user = User::find($id);
+            // dd($user);
             // dd($user->createToken('Auth Token'));
             $token = $user->createToken('Auth Token')->accessToken;
 
             return [
             	'success' => true,
+                'isSupervisor' => $user->getIsSupervisor(),
+                'super_id' => $user->getSupervisorId(),
             	'payload' => $user,
                 'token' => $token,
             ];

@@ -168,48 +168,50 @@
                             label="اكتب اسم الناخب بالكامل هنا"
                         ></v-text-field>
 
-                        <v-autocomplete
-                            v-model="supervisor"
-                            :items="supervisors"
-                            :loading="isLoading"
-                            chips
-                            clearable
-                            hide-details
-                            hide-no-data
-                            
-                            item-text="name"
-                            item-value="id"
-                            label="المسئول"
-                            :persistent-hint="false"
-                        >
-                            <template v-slot:selection="{ attr, on, item, selected }">
-                                <v-chip
-                                    v-bind="attr"
-                                    :input-value="selected"
-                                    color="blue-grey"
-                                    class="white--text"
-                                    v-on="on"
-                                >
-                                    <span v-text="item.name"></span>
-                                </v-chip>
-                            </template>
+                        <template v-if="!isSupervisor">
+                          <v-autocomplete
+                              v-model="supervisor"
+                              :items="supervisors"
+                              :loading="isLoading"
+                              chips
+                              clearable
+                              hide-details
+                              hide-no-data
+                              
+                              item-text="name"
+                              item-value="id"
+                              label="المسئول"
+                              :persistent-hint="false"
+                          >
+                              <template v-slot:selection="{ attr, on, item, selected }">
+                                  <v-chip
+                                      v-bind="attr"
+                                      :input-value="selected"
+                                      color="blue-grey"
+                                      class="white--text"
+                                      v-on="on"
+                                  >
+                                      <span v-text="item.name"></span>
+                                  </v-chip>
+                              </template>
 
-                            <template v-slot:no-data>
-                                <v-list-item>
-                                    <v-list-item-title>
-                                        جارى البحث عن
-                                    </v-list-item-title>
-                                </v-list-item>
-                            </template>
+                              <template v-slot:no-data>
+                                  <v-list-item>
+                                      <v-list-item-title>
+                                          جارى البحث عن
+                                      </v-list-item-title>
+                                  </v-list-item>
+                              </template>
 
-                            <template v-slot:item="{ item }">
-                                    <v-list-item-content>
-                                        <v-list-item-title v-text="item.name"></v-list-item-title>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </template>
+                              <template v-slot:item="{ item }">
+                                      <v-list-item-content>
+                                          <v-list-item-title v-text="item.name"></v-list-item-title>
+                                      </v-list-item-content>
+                                  </v-list-item>
+                              </template>
 
-                        </v-autocomplete>
+                          </v-autocomplete>
+                        </template>
 
                         <v-divider :class="'my-5'"></v-divider>
 
@@ -318,6 +320,9 @@
             }
         },
         created() {
+            this.isSupervisor = (localStorage.getItem('isSupervisor') == 'false') ? false : true;
+            this.super_id = localStorage.getItem('super_id');
+
             this.getAppData();
         },
         computed: {
@@ -410,6 +415,7 @@
                 this.isLoading = true;
                 Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
                 Request.post('/api/candidates' , {
+                    super_id: this.super_id,
                     uid: this.candidate.uid,
                     name: this.candidate.name,
                     supervisor: this.supervisor,

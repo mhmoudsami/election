@@ -24,6 +24,9 @@ class CandidateController extends Controller
         if ( $request->candidateName ) {
             $candidates->where('name'  , 'LIKE' , "%$request->candidateName%");
         }
+        if ( $request->super_id ) {
+            $candidates->where(['supervisor_id' => $request->super_id]);
+        }
 
         $candidates = $candidates->orderBy('id' , 'DESC')->paginate(20);
         
@@ -61,7 +64,7 @@ class CandidateController extends Controller
             'list_const' => $request->list_const,
             'location' => $request->location,
             'name' => $request->name,
-            'supervisor_id' => $request->supervisor,
+            'supervisor_id' => ($request->supervisor) ? $request->supervisor : $request->super_id,
             'police' => $request->police,
             'state' => $request->state,
             'uid' => $request->uid,

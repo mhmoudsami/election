@@ -44,6 +44,26 @@ class User extends Authenticatable
     ];
 
     /**
+     * Get the isSupervisor.
+     *
+     * @return bool
+     */
+    public function getIsSupervisor()
+    {
+        return ($this->supervisor) ? true : false;
+    }
+
+    /**
+     * Get the supervisor name.
+     *
+     * @return bool
+     */
+    public function getSupervisorId()
+    {
+        return ($this->supervisor) ? $this->supervisor->id : false;
+    }
+
+    /**
      * Get the superVisor for the user.
      */
     public function supervisor()

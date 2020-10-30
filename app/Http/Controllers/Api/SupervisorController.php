@@ -26,7 +26,7 @@ class SupervisorController extends Controller
 
     public function list()
     {
-        $supervisors = Supervisor::all();
+        $supervisors = Supervisor::all(['name' , 'id' , 'mobile']);
         
         return $supervisors;
     }

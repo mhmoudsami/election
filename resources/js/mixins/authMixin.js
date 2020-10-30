@@ -28,6 +28,8 @@ export default {
                 // console.log(response.data);
                 if (response.data.success) {
                     localStorage.setItem('token' , response.data.token);
+                    localStorage.setItem('isSupervisor' , response.data.isSupervisor);
+                    localStorage.setItem('super_id' , response.data.super_id);
                     window.location.replace('/');
                 }
                 this.closeLoader();

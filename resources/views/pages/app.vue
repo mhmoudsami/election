@@ -155,6 +155,8 @@
             source: String,
         },
         data: () => ({
+            isSupervisor:false,
+            super_id:false,
             logoutDialog: false,
             dialog: false,
             drawer: null,
@@ -203,6 +205,18 @@
             }
         },
         mounted(){
+            this.isSupervisor = (localStorage.getItem('isSupervisor') == 'false') ? false : true;
+            this.super_id = localStorage.getItem('super_id');
+
+            if ( this.isSupervisor ) {
+                this.items = [
+                    { icon: 'mdi-plus', text: 'اضافة ناخب' , link: 'home'},
+                    { icon: 'mdi-cloud', text: 'الناخبين' , link: 'candidates' },
+                    // { icon: 'mdi-clipboard-list', text: 'المسئولين' , link: 'supervisors' },
+                    // { icon: 'mdi-plus', text: 'اضافة مسئول' , link: 'supervisor-create' },
+                    { icon: 'mdi-account-convert', text: 'تسجيل الخروج' , link : 'logout' },
+                ];
+            }
             // this.getAppData();
         },
         methods: {
@@ -220,7 +234,9 @@
                 return true;
             },
             doLogout(){
-                localStorage.removeItem('token')
+                localStorage.removeItem('token');
+                localStorage.removeItem('isSupervisor');
+                localStorage.removeItem('super_id');
                 return window.location.replace('/auth/');
             }
         }

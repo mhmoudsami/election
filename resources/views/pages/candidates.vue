@@ -12,72 +12,82 @@
         </h1>
 
 
-        <v-row>
-            <v-col
-                cols="12"
-                sm="6"
-                md="6"
-            >
-
-                <v-autocomplete
-                    v-model="supervisor"
-                    :items="supervisors"
-                    :loading="isLoading"
-                    chips
-                    clearable
-                    hide-details
-                    hide-no-data
-                    
-                    item-text="name"
-                    item-value="id"
-                    label="المسئول"
-                    :persistent-hint="false"
+        <template v-if="isSupervisor">
+            <v-text-field
+                v-model="candidateName"
+                label="اسم الناخب"
+                autofocus
+                required
+            ></v-text-field>
+        </template>
+        <template v-else>
+            <v-row>
+                <v-col
+                    cols="12"
+                    sm="6"
+                    md="6"
                 >
-                    <template v-slot:selection="{ attr, on, item, selected }">
-                        <v-chip
-                            v-bind="attr"
-                            :input-value="selected"
-                            color="blue-grey"
-                            class="white--text"
-                            v-on="on"
-                        >
-                            <span v-text="item.name"></span>
-                        </v-chip>
-                    </template>
 
-                    <template v-slot:no-data>
-                        <v-list-item>
-                            <v-list-item-title>
-                                جارى البحث عن
-                            </v-list-item-title>
-                        </v-list-item>
-                    </template>
+                    <v-autocomplete
+                        v-model="supervisor"
+                        :items="supervisors"
+                        :loading="isLoading"
+                        chips
+                        clearable
+                        hide-details
+                        hide-no-data
+                        
+                        item-text="name"
+                        item-value="id"
+                        label="المسئول"
+                        :persistent-hint="false"
+                    >
+                        <template v-slot:selection="{ attr, on, item, selected }">
+                            <v-chip
+                                v-bind="attr"
+                                :input-value="selected"
+                                color="blue-grey"
+                                class="white--text"
+                                v-on="on"
+                            >
+                                <span v-text="item.name"></span>
+                            </v-chip>
+                        </template>
 
-                    <template v-slot:item="{ item }">
-                            <v-list-item-content>
-                                <v-list-item-title v-text="item.name"></v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </template>
+                        <template v-slot:no-data>
+                            <v-list-item>
+                                <v-list-item-title>
+                                    جارى البحث عن
+                                </v-list-item-title>
+                            </v-list-item>
+                        </template>
 
-                </v-autocomplete>
+                        <template v-slot:item="{ item }">
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </template>
 
-            </v-col>
-            <v-col
-                cols="12"
-                sm="6"
-                md="6"
-            >
-                <div class="" style="margin-top: 14px;">
-                    <v-text-field
-                        v-model="candidateName"
-                        label="اسم الناخب"
-                        autofocus
-                        required
-                    ></v-text-field>
-                </div>
-            </v-col>
-        </v-row>
+                    </v-autocomplete>
+
+                </v-col>
+                <v-col
+                    cols="12"
+                    sm="6"
+                    md="6"
+                >
+                    <div class="" style="margin-top: 14px;">
+                        <v-text-field
+                            v-model="candidateName"
+                            label="اسم الناخب"
+                            autofocus
+                            required
+                        ></v-text-field>
+                    </div>
+                </v-col>
+            </v-row>
+        </template>
 
 
 
@@ -171,6 +181,8 @@
         name: 'candidates',
         data () {
             return {
+                isSupervisor:false,
+                super_id:false,
                 isLoading:false,
                 candidates: [],
                 currentPage: null,
@@ -187,6 +199,9 @@
             MugenScroll
         },
         created() {
+            this.isSupervisor = Boolean(localStorage.getItem('isSupervisor'));
+            this.super_id = localStorage.getItem('super_id');
+
             this.getAppData();
             this.initCandidates();
         },
@@ -228,6 +243,7 @@
                         page: page,
                         supervisor: this.supervisor,
                         candidateName: this.candidateName,
+                        super_id: this.super_id,
                     }
                 }).then(response => {
                     if ( clearPast ) {
