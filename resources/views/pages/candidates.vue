@@ -12,7 +12,7 @@
         </h1>
 
 
-        <template v-if="isSupervisor">
+        <template v-if="isSupervisor != 'false'">
             <v-text-field
                 v-model="candidateName"
                 label="اسم الناخب"
@@ -20,7 +20,8 @@
                 required
             ></v-text-field>
         </template>
-        <template v-else>
+
+        <template v-if="isSupervisor == 'false'">
             <v-row>
                 <v-col
                     cols="12"
@@ -199,7 +200,7 @@
             MugenScroll
         },
         created() {
-            this.isSupervisor = Boolean(localStorage.getItem('isSupervisor'));
+            this.isSupervisor = localStorage.getItem('isSupervisor');
             this.super_id = localStorage.getItem('super_id');
 
             this.getAppData();
