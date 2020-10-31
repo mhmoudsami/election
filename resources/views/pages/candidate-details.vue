@@ -85,7 +85,7 @@
                             ></v-text-field>
                          </td>
                       </tr>
-                      <tr v-if="editMode">
+                      <tr v-if="(editMode == true && isSupervisor != 'true')">
                          <th>المسئول: </th>
                          <td>
                             <v-select
@@ -190,6 +190,8 @@
         name: 'CandidateDetails',
         data () {
             return {
+                isSupervisor:false,
+                super_id:false,
                 id: null,
                 candidate:{},
                 confirmDialog: false,
@@ -218,6 +220,9 @@
             }
         },
         created() {
+            this.isSupervisor = localStorage.getItem('isSupervisor');
+            this.super_id = localStorage.getItem('super_id');
+
             this.id = this.$route.params.id;
             this.getCandidateDetails(this.id);
             this.getAppData();
