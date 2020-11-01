@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSupervisorExtraMobile extends Migration
+class AddAddressAndCityToSupervisorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class AddSupervisorExtraMobile extends Migration
     public function up()
     {
         Schema::table('supervisors', function (Blueprint $table) {
-            $table->string('mobile_2')->nullable();
-            $table->integer('user_id')->nullable();
+            $table->string('address')->nullable();
+            $table->integer('city_id')->nullable();
         });
     }
 
@@ -27,8 +27,8 @@ class AddSupervisorExtraMobile extends Migration
     public function down()
     {
         Schema::table('supervisors', function (Blueprint $table) {
-            $table->dropColumn('mobile_2');
-            $table->dropColumn('user_id');
+            $table->dropColumn('address');
+            $table->dropColumn('city_id');
         });
     }
 }

@@ -18,6 +18,8 @@ class Supervisor extends Model
         'name',
         'mobile',
         'mobile_2',
+        'city_id',
+        'address',
     ];
 
 
@@ -26,7 +28,7 @@ class Supervisor extends Model
      *
      * @var array
      */
-    protected $appends = ['username'];
+    protected $appends = ['username' , 'city'];
 
     /**
      * The attributes that should be cast to native types.
@@ -46,6 +48,26 @@ class Supervisor extends Model
     public function getUsernameAttribute()
     {
         return ($this->user) ? $this->user->name : '-';
+    }
+
+    /**
+     * Get the city name.
+     *
+     * @return bool
+     */
+    public function getCityAttribute()
+    {
+        if ( ! $this->city_id ) {
+            return '';
+        }
+        $name = '';
+        foreach (config('election.city') as $city) {
+            if ( $city['id'] == $this->city_id ) {
+                $name = $city['name'];
+                break;
+            }
+        }
+        return $name;
     }
 
     /**
