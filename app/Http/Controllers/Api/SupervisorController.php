@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Supervisor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class SupervisorController extends Controller
 {
@@ -15,20 +16,40 @@ class SupervisorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $supervisors = Supervisor::where([]);
-        $supervisors->orderBy('id' , 'DESC');
+
+        $supervisors->select('supervisors.*' , 'candidates.supervisor_id' , DB::raw('COUNT(candidates.supervisor_id) as count'));
+        $supervisors->leftJoin('candidates' , 'supervisors.id' , '=' , 'candidates.supervisor_id');
+        $supervisors->groupBy('supervisors.id');
+
+
+        if ( $request->id ) {
+            $supervisors->where('supervisors.id' , $request->id);
+        }
+        if ( $request->city_id ) {
+            $supervisors->where('supervisors.city_id' , $request->city_id);
+        }
+
+        $supervisors->orderBy('count' , 'DESC');
+        $supervisors->orderBy('supervisors.id' , 'DESC');
         
         return $supervisors->paginate(20);
     }
 
 
-    public function list()
+    public function list(Request $request)
     {
-        $supervisors = Supervisor::all(['name' , 'id' , 'mobile']);
+        $supervisors = Supervisor::where([]);
+        if ( $request->city_id ) {
+            $supervisors->where('city_id' , $request->city_id);
+        }
+        if ( $request->id ) {
+            $supervisors->where('id' , $request->id);
+        }
         
-        return $supervisors;
+        return $supervisors->get();
     }
 
 

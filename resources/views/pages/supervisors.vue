@@ -11,22 +11,52 @@
         </h1>
 
 
-        <v-tabs-items>
-            <v-tab-item
-            >
-                <v-card
-                    class="mx-auto order-item"
-                    tile
-                >
-                    <v-list-item>
-                        <v-list-item-content>
-                            <v-list-item-title>Single order item</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-card>
+        <v-row>
 
-            </v-tab-item>
-        </v-tabs-items>
+            <v-col
+                cols="12"
+                sm="6"
+                md="6"
+            >
+                <v-select
+                    v-model="city_id"
+                    :items="cities"
+                    label="المدينه"
+                    :loading="isLoading"
+                    chips
+                    clearable
+                    hide-details
+                    hide-no-data
+                    
+                    item-text="name"
+                    item-value="id"
+                ></v-select>
+            </v-col>
+
+            <v-col
+                cols="12"
+                sm="6"
+                md="6"
+            >
+                <v-select
+                    v-model="super_id"
+                    :items="list"
+                    label="المسئول"
+                    :loading="isLoading"
+                    chips
+                    clearable
+                    hide-details
+                    hide-no-data
+                    
+                    item-text="name"
+                    item-value="id"
+                ></v-select>
+            </v-col>
+        </v-row>
+
+        <div class="alert alert-info" role="alert">
+            العدد : {{ total }}
+        </div>
         
         <template v-if="(supervisors.length > 0)">
             <template v-for="supervisor in supervisors">
@@ -43,13 +73,16 @@
                                 <div class="order-item-col">
                                     <ul>
                                         <li>
-                                            {{ supervisor.name }}
+                                            <b>الاسم : {{ supervisor.name }}</b>
                                         </li>
                                         <li>
-                                            {{ supervisor.mobile }}
+                                            <b>الموبايل : {{ supervisor.mobile }}</b>
                                         </li>
                                         <li>
-                                            
+                                            <b>العدد : {{ supervisor.count }}</b>
+                                        </li>
+                                        <li>
+                                            <b>المدينه : {{ supervisor.city }}</b>
                                         </li>
                                     </ul>
                                 </div>
@@ -90,15 +123,33 @@
             return {
                 isLoading:false,
                 supervisors: [],
+                list: [],
+                city_id: null,
+                super_id: null,
                 currentPage: null,
                 pageCount: 0,
                 isLoadingMore:false,
+                total: 0,
                 notify:{
                     display: false,
                     text: '',
                     timeout: 3000,
                     color:'blue'
-                }
+                },
+                cities:[
+                    {
+                        'name' : 'الخصوص',
+                        'id' : 1,
+                    },
+                    {
+                        'name' : 'الخانكه',
+                        'id' : 2,
+                    },
+                    {
+                        'name' : 'العبور',
+                        'id' : 3,
+                    },
+                ]
             }
         },
         components: {
@@ -112,7 +163,15 @@
         },
         watch: {
             $route(to, from) {
-            }
+            },
+            city_id(){
+                this.super_id = null;
+                this.getSupervisors(null , false , true);
+                this.getSupervisorsByCity();
+            },
+            super_id(){
+                this.getSupervisors(null , false , true);
+            },
         },
         methods: {
             supervisorLink(id){
@@ -121,23 +180,41 @@
             initSupervisors(){
                 this.getSupervisors();
             },
-            getSupervisors(page=null , isLoadingMore=false){
+            getSupervisorsByCity(){
+                Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                Request.get('/api/supervisors/list' , {
+                    params:{
+                        city_id: this.city_id,
+                        id: this.super_id,
+                    }
+                }).then(response => {
+                    this.list = response.data;
+                    this.isLoading = false;
+                }).catch(error => {
+                });
+            },
+            getSupervisors(page=null , isLoadingMore=false , clearPast = false){
                 this.isLoading = true;
                 this.isLoadingMore = isLoadingMore;
 
-                if ( isLoadingMore ) {
-                    console.log('dfdfdf');
-                }
 
                 Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
                 Request.get('/api/supervisors' , {
                     params:{
                         page: page,
+                        id: this.super_id,
+                        city_id: this.city_id,
                     }
                 }).then(response => {
-                    this.supervisors = this.supervisors.concat(response.data.data);
+                    if ( clearPast ) {
+                        this.supervisors = response.data.data;
+                    }else{
+                        this.supervisors = this.supervisors.concat(response.data.data);
+                    }
+                    
                     this.pageCount = response.data.last_page;
                     this.currentPage = response.data.current_page;
+                    this.total = response.data.total;
                     // console.log(response.data);
                     this.isLoading = false;
                     this.isLoadingMore = false;
