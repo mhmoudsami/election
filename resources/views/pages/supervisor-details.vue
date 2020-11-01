@@ -104,6 +104,36 @@
                                 ></v-text-field>
                              </td>
                           </tr>
+
+                          <tr>
+                             <th>المدينه : </th>
+                             <td>
+                                <v-select
+                                    v-model="supervisor.city_id"
+                                    :items="cities"
+                                    label="المدينه"
+                                    :loading="isLoading"
+                                    chips
+                                    clearable
+                                    hide-details
+                                    hide-no-data
+                                    
+                                    item-text="name"
+                                    item-value="id"
+                                ></v-select>
+                             </td>
+                          </tr>
+                          <tr>
+                             <th>العنوان : </th>
+                             <td>
+                                <v-text-field
+                                    v-model="supervisor.address"
+                                    label="العنوان"
+                                    required
+                                ></v-text-field>
+                             </td>
+                          </tr>
+
                           <tr>
                              <th>اسم المستخدم: </th>
                              <td>
@@ -135,6 +165,14 @@
                           <tr>
                              <th>الموبايل 2: </th>
                              <td>{{ supervisor.mobile_2 }}</td>
+                          </tr>
+                          <tr>
+                             <th>المدينه: </th>
+                             <td>{{ supervisor.city }}</td>
+                          </tr>
+                          <tr>
+                             <th>العنوان: </th>
+                             <td>{{ supervisor.address }}</td>
                           </tr>
                           <tr>
                              <th>اسم المستخدم: </th>
@@ -201,7 +239,21 @@
                     text: '',
                     timeout: 3000,
                     color:'blue'
-                }
+                },
+                cities:[
+                    {
+                        'name' : 'الخصوص',
+                        'id' : 1,
+                    },
+                    {
+                        'name' : 'الخانكه',
+                        'id' : 2,
+                    },
+                    {
+                        'name' : 'العبور',
+                        'id' : 3,
+                    },
+                ]
             }
         },
         created() {
@@ -243,6 +295,9 @@
                         mobile: this.supervisor.mobile,
                         mobile_2: this.supervisor.mobile_2,
 
+                        address: this.supervisor.address,
+                        city_id: this.supervisor.city_id,
+
                         user_id: this.supervisor.user_id,
                         username: this.supervisor.username,
                         password: this.supervisor.password,
@@ -261,6 +316,7 @@
                     this.notify.color = 'green';
                     this.isLoading = false;
                     this.editMode = false;
+                    location.reload();
                 });
             },
             deleteClicked(){

@@ -47,7 +47,7 @@ class Supervisor extends Model
      */
     public function getUsernameAttribute()
     {
-        return ($this->user) ? $this->user->name : '-';
+        return ($this->user) ? $this->user->name : null;
     }
 
     /**

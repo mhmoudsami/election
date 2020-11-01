@@ -85,7 +85,8 @@
                 class="mx-auto mt-10"
                 tile
             >
-                <div class="title px-5 py-5">
+                <div class="clearfix"></div>
+                <div class="danger-title">
                     بيانات الناخب المسجله
                 </div>
                 <div class="px-5 clearfix">

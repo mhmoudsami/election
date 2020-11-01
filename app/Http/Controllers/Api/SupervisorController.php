@@ -65,20 +65,24 @@ class SupervisorController extends Controller
             'name' => $request->name,
             'mobile' => $request->mobile,
             'mobile_2' => $request->mobile_2,
+            'city_id' => $request->city_id,
+            'address' => $request->address,
         ]);
 
         $supervisor->save();
 
-        $user = User::create([
-            'email' => time()."@election.info",
-            'email_verified_at' => now(),
-            'name' => $request->username,
-            'password' => Hash::make($request->password),
-        ]);
-        $user->save();
+        if ( $request->username ) {
+            $user = User::create([
+                'email' => time()."@election.info",
+                'email_verified_at' => now(),
+                'name' => $request->username,
+                'password' => Hash::make($request->password),
+            ]);
+            $user->save();
 
-        $supervisor->user_id = $user->id;
-        $supervisor->save();
+            $supervisor->user_id = $user->id;
+            $supervisor->save();
+        }
 
 
 
@@ -123,12 +127,14 @@ class SupervisorController extends Controller
             }
         }
         
-
+        // dd($request);
 
 
         $supervisor->name = $request->name;
         $supervisor->mobile = $request->mobile;
         $supervisor->mobile_2 = $request->mobile_2;
+        $supervisor->address = $request->address;
+        $supervisor->city_id = $request->city_id;
         
 
         if ( ! $supervisor->save() ) {
@@ -144,27 +150,26 @@ class SupervisorController extends Controller
          * @var [type]
          */
         if ( ! $supervisor->user ) {
-            $user = User::create([
-                'email' => time()."@election.info",
-                'email_verified_at' => now(),
-                'name' => $request->username,
-                'password' => Hash::make($request->password),
-            ]);
+            if ( $request->username ) {
+                $user = User::create([
+                    'email' => time()."@election.info",
+                    'email_verified_at' => now(),
+                    'name' => $request->username,
+                    'password' => Hash::make($request->password),
+                ]);
+                $user->save();
+                $supervisor->user_id = $user->id;
+                $supervisor->save();
+            }
         }else{
             $user = $supervisor->user;
             $user->name = $request->username;
             if ( $request->password ) {
                 $user->password = Hash::make($request->password);
             }
+            $user->save();
         }
         
-        $user->save();
-
-        $supervisor->user_id = $user->id;
-        $supervisor->save();
-
-
-
 
 
         return [

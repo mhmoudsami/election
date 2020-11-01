@@ -72,6 +72,15 @@
                 background: #f2f2f2;
                 text-align: right;
             }
+            .danger-title{
+                background: red;
+                color: white;
+                text-align: center;
+                margin: 18px;
+                border-radius: 5px;
+                font-size: 20px;
+                padding: 5px;
+            }
         </style>
     </head>
     <body class="antialiased">

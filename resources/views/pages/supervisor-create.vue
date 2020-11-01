@@ -60,6 +60,7 @@
                             ></v-text-field>
                          </td>
                       </tr>
+
                       <tr>
                          <th>الموبايل 2 : </th>
                          <td>
@@ -70,6 +71,38 @@
                             ></v-text-field>
                          </td>
                       </tr>
+                      
+                      <tr>
+                         <th>المدينه : </th>
+                         <td>
+                            <v-select
+                                v-model="supervisor.city_id"
+                                :items="cities"
+                                label="المدينه"
+                                :loading="isLoading"
+                                chips
+                                clearable
+                                hide-details
+                                hide-no-data
+                                
+                                item-text="name"
+                                item-value="id"
+                            ></v-select>
+                         </td>
+                      </tr>
+                      
+                      <tr>
+                         <th>العنوان : </th>
+                         <td>
+                            <v-text-field
+                                v-model="supervisor.address"
+                                label="العنوان"
+                                required
+                            ></v-text-field>
+                         </td>
+                      </tr>
+
+
                       <tr>
                          <th>اسم المستخدم : </th>
                          <td>
@@ -131,13 +164,29 @@
                     mobile_2: '',
                     username: '',
                     password: '',
+                    city_id: null,
+                    address: '',
                 },
                 notify:{
                     display: false,
                     text: '',
                     timeout: 3000,
                     color:'blue'
-                }
+                },
+                cities:[
+                    {
+                        'name' : 'الخصوص',
+                        'id' : 1,
+                    },
+                    {
+                        'name' : 'الخانكه',
+                        'id' : 2,
+                    },
+                    {
+                        'name' : 'العبور',
+                        'id' : 3,
+                    },
+                ]
             }
         },
         created() {
@@ -171,6 +220,8 @@
                         mobile_2: this.supervisor.mobile_2,
                         username: this.supervisor.username,
                         password: this.supervisor.password,
+                        address: this.supervisor.address,
+                        city_id: this.supervisor.city_id,
                 }).then(response => {
                     if ( response.data.success == false ) {
                         this.notify.display = true;
