@@ -175,10 +175,12 @@
             },
             city_id(){
                 this.super_id = null;
+                this.getRequiredData();
                 this.getSupervisors(null , false , true);
                 this.getSupervisorsByCity();
             },
             super_id(){
+                this.getRequiredData();
                 this.getSupervisors(null , false , true);
             },
         },
@@ -186,7 +188,12 @@
             getRequiredData(){
                 this.isLoading = true;
                 Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-                Request.get('/api/supervisors/data').then(response => {
+                Request.get('/api/supervisors/data' , {
+                    params:{
+                        city_id: this.city_id,
+                        id: this.super_id,
+                    }
+                }).then(response => {
                     this.total = response.data.supervisors;
                     this.candidate_total = response.data.candidates;
                     this.isLoading = false;

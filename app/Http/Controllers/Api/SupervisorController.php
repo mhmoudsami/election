@@ -9,6 +9,7 @@ use App\Models\Candidate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
 
 class SupervisorController extends Controller
 {
@@ -16,10 +17,20 @@ class SupervisorController extends Controller
      * get main data
      * @return [type] [description]
      */
-    public function data()
+    public function data(Request $request)
     {
         $supervisors = Supervisor::count();
         $candidates = Candidate::count();
+
+        if ( $request->city_id ) {
+            $supervisors = Supervisor::where('city_id' , $request->city_id)->get();
+            $ids = Arr::pluck($supervisors , 'id');
+            $candidates = Candidate::whereIn('supervisor_id' , $ids)->count();
+        }
+        if ( $request->id ) {
+            $super = Supervisor::where('id' , $request->id)->withCount('candidates')->first();
+            $candidates = $super->candidates_count;
+        }
 
         return [
             'supervisors' => $supervisors,
