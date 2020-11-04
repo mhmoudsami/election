@@ -81,6 +81,29 @@
                 font-size: 20px;
                 padding: 5px;
             }
+            .super-item{
+                position: relative;
+                margin-bottom: 15px;
+            }
+            .super-item .overall-link{
+                position: absolute;
+                top: 0;
+                bottom: 0; left: 0;
+                right: 0;
+            }
+            .otherrow{
+                background: #d9edf7;
+            }
+            .text-green{
+                color: green;
+            }
+            .supertable{
+                margin: 0;
+            }
+            .table.supertable td,
+            .table.supertable th{
+                text-align: right;
+            }
         </style>
     </head>
     <body class="antialiased">

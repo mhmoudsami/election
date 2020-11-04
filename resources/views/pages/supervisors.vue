@@ -53,43 +53,48 @@
                 ></v-select>
             </v-col>
         </v-row>
-
-        <div class="alert alert-info" role="alert">
-            العدد : {{ total }}
-        </div>
         
+
+        <!-- table-bordered -->
+        <div class="super-item">
+            <table class="table supertable table-striped">
+                <tbody>
+                    <tr class="otherrow">
+                        <th>اجمالى المسئولين</th>
+                        <td>{{ total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+
         <template v-if="(supervisors.length > 0)">
             <template v-for="supervisor in supervisors">
-                <v-card
-                    class="mx-auto order-item"
-                    tile
-                    link
-                    :href="supervisorLink(supervisor.id)"
-                >
-                    <v-list-item>
-                        <v-list-item-content>
-                            <!-- <v-list-item-title>Single order item</v-list-item-title> -->
-                            <div class="order-item-columns d-flex justify-space-between">
-                                <div class="order-item-col">
-                                    <ul>
-                                        <li>
-                                            <b>الاسم : {{ supervisor.name }}</b>
-                                        </li>
-                                        <li>
-                                            <b>الموبايل : {{ supervisor.mobile }}</b>
-                                        </li>
-                                        <li>
-                                            <b>العدد : {{ supervisor.count }}</b>
-                                        </li>
-                                        <li>
-                                            <b>المدينه : {{ supervisor.city }}</b>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-card>
+
+                <!-- table-bordered -->
+                <div class="super-item">
+                    <a :href="supervisorLink(supervisor.id)" link class="overall-link"></a>
+                    <table class="table supertable table-striped">
+                        <tbody>
+                            <tr>
+                                <th>الاسم</th>
+                                <td>{{ supervisor.name }}</td>
+                                <th>المدينه</th>
+                                <td>{{ supervisor.city }}</td>
+                                <th>الموبايل</th>
+                                <td>{{ supervisor.mobile }} - {{ supervisor.mobile_2 }}</td>
+                            </tr>
+                            <tr class="otherrow">
+                                <th>العنوان</th>
+                                <td colspan="3">{{ supervisor.address }}</td>
+                                <th><span class="text-green">اجمالى الناخبين</span> </th>
+                                <td>{{ supervisor.count }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </template>
         </template>
 
