@@ -92,10 +92,10 @@
                 right: 0;
             }
             .otherrow{
-                background: #d9edf7;
+                background: #d8edf6;
             }
             .text-green{
-                color: green;
+                color: #44998b;
             }
             .supertable{
                 margin: 0;

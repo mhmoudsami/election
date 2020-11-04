@@ -59,9 +59,11 @@
         <div class="super-item">
             <table class="table supertable table-striped">
                 <tbody>
-                    <tr class="otherrow">
+                    <tr class="" style="background: #c5d7e9; color: #44998b">
                         <th>اجمالى المسئولين</th>
                         <td>{{ total }}</td>
+                        <th>اجمالى الناخبين</th>
+                        <td>{{ candidate_total }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -135,6 +137,7 @@
                 pageCount: 0,
                 isLoadingMore:false,
                 total: 0,
+                candidate_total: 0,
                 notify:{
                     display: false,
                     text: '',
@@ -162,6 +165,7 @@
         },
         created() {
             var status = this.$route.meta.status;
+            this.getRequiredData();
             this.initSupervisors();
         },
         computed: {
@@ -179,6 +183,15 @@
             },
         },
         methods: {
+            getRequiredData(){
+                this.isLoading = true;
+                Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                Request.get('/api/supervisors/data').then(response => {
+                    this.total = response.data.supervisors;
+                    this.candidate_total = response.data.candidates;
+                    this.isLoading = false;
+                });
+            },
             supervisorLink(id){
                 return "/#/supervisors/"+id;
             },

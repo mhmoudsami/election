@@ -5,12 +5,29 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Supervisor;
+use App\Models\Candidate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
 class SupervisorController extends Controller
 {
+    /**
+     * get main data
+     * @return [type] [description]
+     */
+    public function data()
+    {
+        $supervisors = Supervisor::count();
+        $candidates = Candidate::count();
+
+        return [
+            'supervisors' => $supervisors,
+            'candidates' => $candidates,
+        ];
+    }
+
+
     /**
      * Display a listing of the resource.
      *
