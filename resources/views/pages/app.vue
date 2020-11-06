@@ -44,7 +44,7 @@
                     <!-- <v-avatar>
                         <v-img :src="appData.restaurant.logo"></v-img>
                     </v-avatar> -->
-                    Election
+                    {{ user.name }}
                 </span>
             </v-toolbar-title>
 
@@ -160,6 +160,7 @@
             logoutDialog: false,
             dialog: false,
             drawer: null,
+            user:{},
             items: [
                 { icon: 'mdi-plus', text: 'اضافة ناخب' , link: 'home'},
                 { icon: 'mdi-cloud', text: 'الناخبين' , link: 'candidates' },
@@ -217,9 +218,17 @@
                     { icon: 'mdi-account-convert', text: 'تسجيل الخروج' , link : 'logout' },
                 ];
             }
-            // this.getAppData();
+            this.getAppData();
         },
         methods: {
+            getAppData(){
+                this.isLoading = true;
+                Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+                Request.get('/api/user',).then(response => {
+                    this.user = response.data;
+                    this.isLoading = false;
+                });
+            },
             goTo(link){
                 if ( link == 'logout' ) {
                     return this.openLogoutDialog();

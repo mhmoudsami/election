@@ -194,7 +194,6 @@
                         id: this.super_id,
                     }
                 }).then(response => {
-                    this.total = response.data.supervisors;
                     this.candidate_total = response.data.candidates;
                     this.isLoading = false;
                 });
