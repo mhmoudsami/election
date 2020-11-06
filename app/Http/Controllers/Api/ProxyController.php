@@ -27,7 +27,16 @@ class ProxyController extends Controller
         	];
         }
 
-		$response = Http::get('https://proxy.elections.eg/election', [
+        
+		if (\App::environment('local')) {
+		    $proxy = '';
+		}else{
+			$proxy = 'socks5://127.0.0.1:9050';
+		}
+
+		$response = Http::withOptions([
+		    'proxy' => $proxy,
+		])->get('https://proxy.elections.eg/election', [
 			'nid' => $nid,
 		    'location' => 1,
 		    'cons' => 1,
@@ -49,4 +58,17 @@ class ProxyController extends Controller
 
 		return $response;
     }
+
+    public function hip()
+    {
+		return Http::withOptions([
+		    'proxy' => 'socks5://127.0.0.1:9050',
+		])->get('https://api.ipify.org?format=json');
+    }
+
+    public function ip()
+    {
+		return Http::get('https://api.ipify.org?format=json');
+    }
+
 }

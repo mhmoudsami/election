@@ -23,6 +23,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
+Route::middleware('api')->get('proxy/hip', [ProxyController::class , 'hip']);
+Route::middleware('api')->get('proxy/ip', [ProxyController::class , 'ip']);
 Route::middleware('api')->get('proxy/{nid}', [ProxyController::class , 'index']);
 
 Route::middleware('api')->post('/login', [AuthController::class , 'login']);
