@@ -65,6 +65,7 @@
                             depressed
                             color="error"
                             @click="deleteClicked()"
+                            v-if="isSupervisor != 'true'"
                         >
                             حذف
                         </v-btn>
@@ -246,7 +247,7 @@
                 this.isLoading = true;
                 Request.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
                 Request.get('/api/candidates/'+id).then(response => {
-                    console.log(response.data);
+                    // console.log(response.data);
                     this.candidate = response.data;
                     this.isLoading = false;
                 });
