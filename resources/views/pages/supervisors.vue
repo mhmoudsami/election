@@ -80,16 +80,22 @@
                     <table class="table supertable table-striped">
                         <tbody>
                             <tr>
-                                <th class="text-right" width="10%">
+                                <th class="text-right" width="7%">
                                     الاسم : 
                                 </th>
-                                <td class="text-right" width="30%">
+                                <td class="text-right" width="25%">
                                     {{ supervisor.name }}
+                                </td>
+                                <th class="text-right" width="7%">
+                                    العنوان : 
+                                </th>
+                                <td class="text-right" width="25%">
+                                    {{ supervisor.address }}
                                 </td>
                                 <th class="text-left">
                                     <span class="text-green">اجمالى الناخبين : </span>
                                 </th>
-                                <td class="text-right" width="30%">
+                                <td class="text-right" width="25%">
                                     {{ supervisor.count }}
                                 </td>
                             </tr>
