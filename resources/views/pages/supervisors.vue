@@ -80,18 +80,18 @@
                     <table class="table supertable table-striped">
                         <tbody>
                             <tr>
-                                <th>الاسم</th>
-                                <td>{{ supervisor.name }}</td>
-                                <th>المدينه</th>
-                                <td>{{ supervisor.city }}</td>
-                                <th>الموبايل</th>
-                                <td>{{ supervisor.mobile }} - {{ supervisor.mobile_2 }}</td>
-                            </tr>
-                            <tr class="otherrow">
-                                <th>العنوان</th>
-                                <td colspan="3">{{ supervisor.address }}</td>
-                                <th><span class="text-green">اجمالى الناخبين</span> </th>
-                                <td>{{ supervisor.count }}</td>
+                                <th class="text-right" width="10%">
+                                    الاسم : 
+                                </th>
+                                <td class="text-right" width="30%">
+                                    {{ supervisor.name }}
+                                </td>
+                                <th class="text-left">
+                                    <span class="text-green">اجمالى الناخبين : </span>
+                                </th>
+                                <td class="text-right" width="30%">
+                                    {{ supervisor.count }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
